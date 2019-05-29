@@ -100,12 +100,34 @@ Mail::send('viewname.name',$data, function ($message) {
         ->subject($data['email_subject'])
         ->cc($data['recipient_cc'],$data['recipient_cc_name'])
         ->bcc($data['recipient_bcc'],$data['recipient_bcc_name'])
-        ->replyTo($data['reply_to'], $data['recipient_bcc']);
+        ->replyTo($data['reply_to'], $data['recipient_bcc'])
         ->attach('/myfilename.pdf');
 });
 ```
 create file in resources/views/viewname/name.blade.php 
 and include your email content 
+
+
+IF want to pass others parameters of Pepipost SendEmail API use embedData function and include below code as below
+Add parameters as per your requirement 
+
+```php
+function sendMail(){
+
+Mail::send('viewname.name',$data, function ($message) {
+    $message
+        ->to($data['recipient'], $data['recipent_name'])
+        ->from($data['sender_email'], $data['sender_name'])
+        ->subject($data['email_subject'])
+        ->cc($data['recipient_cc'],$data['recipient_cc_name'])
+        ->bcc($data['recipient_bcc'],$data['recipient_bcc_name'])
+        ->replyTo($data['reply_to'], $data['recipient_bcc'])
+        ->attach('/myfilename.pdf')
+        ->embedData([
+            'personalizations' => ['attributes'=>['ACCOUNT_BAL'=>'String','NAME'=>'NAME'],'x-apiheader'=>'x-apiheader_value','x-apiheader_cc'=>'x-apiheader_cc_value'],'settings' => ['bcc'=>'bccemail@gmail.com','clicktrack'=>1,'footer'=>1,'opentrack'=>1,'unsubscribe'=>1 ],'tags'=>'tags_value','templateId'=>''
+        ],'pepipostapi');        
+});
+```
 
 Create Route in routes/web.php
 
