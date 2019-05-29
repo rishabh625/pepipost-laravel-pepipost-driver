@@ -14,6 +14,7 @@ class PepipostTransport extends Transport
 {
     
 
+    const SMTP_API_NAME = 'pepipostapi';
     const MAXIMUM_FILE_SIZE = 7340032;
     const BASE_URL = 'https://api.pepipost.com/v2/sendEmail';
 
@@ -38,7 +39,6 @@ class PepipostTransport extends Transport
      */
     public function send(Swift_Mime_SimpleMessage $message, &$failedRecipients = null)
     {
-        echo $message;
         $this->beforeSendPerformed($message);
 
         $data = [
@@ -119,6 +119,7 @@ class PepipostTransport extends Transport
     private function getTo(Swift_Mime_SimpleMessage $message)
     {
 
+	$this->numberOfRecipients=0;
         if ($message->getTo()) {
 	    $toarray = [];
             foreach ($message->getTo() as $email => $name) {
@@ -131,6 +132,7 @@ class PepipostTransport extends Transport
           		 $recipient['recipient_bcc'] = $this->getBCC($message);
 		}
                 $toarray[] = $recipient;
+		++$this->numberOfRecipients;
         	}
 	
    }
@@ -221,9 +223,11 @@ class PepipostTransport extends Transport
      */
     private function getAttachments(Swift_Mime_SimpleMessage $message)
     {
-        $attachments = [];
-        foreach ($message->getChildren() as $attachment) {
-            if ((!$attachment instanceof Swift_Attachment && !$attachment instanceof Swift_Image)
+       $attachments = [];
+       foreach ($message->getChildren() as $attachment) {
+        $attachment = $message->getChildren();   
+	 if ((!$attachment instanceof Swift_Attachment && !$attachment instanceof Swift_Image)
+		|| $attachment->getFilename() === self::SMTP_API_NAME
                 || !strlen($attachment->getBody()) > self::MAXIMUM_FILE_SIZE
             ) {
                 continue;
@@ -232,7 +236,7 @@ class PepipostTransport extends Transport
                 'fileContent'     => base64_encode($attachment->getBody()),
                 'fileName'    => $attachment->getFilename(),
             ];
-        }
+       }
         return $this->attachments = $attachments;
     }
 
@@ -246,10 +250,10 @@ class PepipostTransport extends Transport
      */
     protected function setParameters(Swift_Mime_SimpleMessage $message, $data)
     {
-        $this->numberOfRecipients = 0;
+       //$this->numberOfRecipients = 0;
        $smtp_api = [];
        foreach ($message->getChildren() as $attachment) {
-            if (!$attachment instanceof Swift_Image) {
+            if (!$attachment instanceof Swift_Image || !in_array(self::SMTP_API_NAME, [$attachment->getFilename(), $attachment->getContentType()])) {
                 continue;
             }
             $smtp_api = $attachment->getBody();
@@ -258,10 +262,15 @@ class PepipostTransport extends Transport
 
             switch ($key) {
 
-                case 'api_key':
-                    $this->apiKey = $val;
+                case 'settings':
+                    $this->setSettings($data, $val);
                     continue 2;
-
+		case 'tags':
+		    array_set($data,'tags',$val);
+		    continue 2;
+		case 'templateId':
+		    array_set($data,'templateId',$val);
+		    continue 2;	
                 case 'personalizations':
                     $this->setPersonalizations($data, $val);
                     continue 2;
@@ -279,24 +288,26 @@ class PepipostTransport extends Transport
 
     private function setPersonalizations(&$data, $personalizations)
     {
-	echo "in personalisations";
+
         foreach ($personalizations as $index => $params) {
-		echo $index;
-            foreach ($params as $key => $val) {
-		echo $key;
-		echo $val;
-                if (in_array($key, ['recipient', 'recipient_cc', 'recipient_bcc'])) {
-		      array_set($data, 'personalizations.' . $key, [$val]);
-		      echo "data value";
-		      echo $key;
-		      print_r($data);
-		      echo "data end";
-                    ++$this->numberOfRecipients;
+	    $count=0;
+	    while($count<$this->numberOfRecipients)
+	    {
+                if (in_array($params, ['attributes'])) {
+		      array_set($data, 'personalizations.'.$count . '.' . $index  , $params);
                 } else {
-		      array_set($data, 'personalizations.' . $key, [$val]);
+		      array_set($data, 'personalizations.'.$count . '.' . $index  , $params);
                 }
-            }
-        }
+		$count++;
+       	 }
+	}
+    }
+
+    private function setSettings(&$data, $settings)
+    {
+        foreach ($settings as $index => $params) {
+        	array_set($data,'settings.'.$index,$params);   
+	}
     }
 
     /**
@@ -305,6 +316,7 @@ class PepipostTransport extends Transport
      */
     private function post($payload)
     {
+	//print_r(json_encode($payload));exit;
         return $this->client->post($this->endpoint, $payload);
     }
 }
