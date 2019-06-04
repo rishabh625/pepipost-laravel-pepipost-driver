@@ -16,7 +16,7 @@ To use this package required your [Pepipost Api Key](https://app.pepipost.com). 
 
 guzzlehttp/guzzle 6.2.0
 
-A free account on Pepipost. If you don't have a one, [click here](https://app.pepipost.com) to signup and get 30,000 emails free every month.
+A free account on Pepipost. If you don't have a one, [click here](https://app.pepipost.com) 
 
 ## Usage
 
@@ -38,7 +38,7 @@ or installed with composer
 
 $ composer require pepipost/laravel-pepipost-driver
 
-Add the sendgrid service provider in config/app.php: (Laravel 5.5+ uses Package Auto-Discovery, so doesn't require you to manually add the ServiceProvider.)
+Add the pepipost service provider in config/app.php: (Laravel 5.5+ uses Package Auto-Discovery, so doesn't require you to manually add the ServiceProvider.)
 
 ```php
 
@@ -64,7 +64,7 @@ If you need to set custom endpoint, you can set any endpoint by using endpoint k
 ```php    
 'pepipost' => [
         'api_key' => env('PEPIPOST_API_KEY'),
-        'endpoint' => 'https://app.example.com/sendEmail',
+        'endpoint' => 'https://api.pepipost.com/v2/sendEmail',
     ],
 ```
 
