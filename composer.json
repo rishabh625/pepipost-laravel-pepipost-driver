@@ -31,9 +31,6 @@
     "support": {
         "issues": "https://github.com/s-ichikawa/laravel-sendgrid-driver/issues"
     },
-    "suggest": {
-        "s-ichikawa/sendgrid-api-builder": "support to build json for sendgrid api"
-    },
     "extra": {
         "laravel": {
             "providers": [
