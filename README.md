@@ -14,7 +14,7 @@ We are trying to make our libraries Community Driven- which means we need your h
 
 We welcome any sort of contribution to this library.
 
-The latest 2.5.0 version of this library provides is fully compatible with the latest Pepipost v2.0 API.
+The latest 1.0.0 version of this library provides is fully compatible with the latest Pepipost v2.0 API.
 
 For any update of this library check [Releases](https://github.com/pepipost/pepipost-sdk-java/releases).
 
@@ -44,7 +44,7 @@ For any update of this library check [Releases](https://github.com/pepipost/pepi
 
 guzzlehttp/guzzle 6.2.0
 
-A free account on Pepipost. If you don't have a one, [click here](https://app.pepipost.com) to signup and get 30,000 emails free every month.
+A free account on Pepipost. If you don't have a one, [click here](https://app.pepipost.com) to signup.
 
 ## Usage
 
