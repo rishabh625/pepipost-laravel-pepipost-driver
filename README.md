@@ -189,8 +189,7 @@ Mail::send('viewname.name',$data, function ($message) {
 <a name="announcements"></a>
 # Announcements
 
-v1.0.0 has been released! Please see the [release notes](https://github.com/pepipost/laravel-pepipost-driver
-/releases/) for details.
+v1.0.0 has been released! Please see the [release notes](https://github.com/pepipost/laravel-pepipost-driver/releases/) for details.
 
 All updates to this library are documented in our [releases](https://github.com/pepipost/laravel-pepipost-driver/releases). For any queries, feel free to reach out us at dx@pepipost.com
 
@@ -201,7 +200,7 @@ If you are interested in the future direction of this project, please take a loo
 
 <a name="about"></a>
 ## About
-pepipost-sdk-java library is guided and supported by the [Pepipost Developer Experience Team](https://github.com/orgs/pepipost/teams/pepis/members) .
+pepipost-laravel library is guided and supported by the [Pepipost Developer Experience Team](https://github.com/orgs/pepipost/teams/pepis/members) .
 This pepipost library is maintained and funded by Pepipost Ltd. The names and logos for pepipost gem are trademarks of Pepipost Ltd.
 
 <a name="license"></a>
