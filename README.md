@@ -16,7 +16,7 @@ We welcome any sort of contribution to this library.
 
 The latest 1.0.0 version of this library provides is fully compatible with the latest Pepipost v2.0 API.
 
-For any update of this library check [Releases](https://github.com/pepipost/pepipost-sdk-java/releases).
+For any update of this library check [Releases](https://github.com/pepipost/laravel-pepipost-driver/releases).
 
 # Table of Content
   
@@ -62,11 +62,11 @@ Add the package to your composer.json and run composer update.
     "pepipost/laravel-pepipost-driver": "~1.0"
 },
 ```
-or installed with composer
+or install with composer
 
 $ composer require pepipost/laravel-pepipost-driver
 
-Add the sendgrid service provider in config/app.php: (Laravel 5.5+ uses Package Auto-Discovery, so doesn't require you to manually add the ServiceProvider.)
+Add the pepipost service provider in config/app.php: (Laravel 5.5+ uses Package Auto-Discovery, so doesn't require you to manually add the ServiceProvider.)
 
 ```php
 
@@ -92,7 +92,7 @@ If you need to set custom endpoint, you can set any endpoint by using endpoint k
 ```php    
 'pepipost' => [
         'api_key' => env('PEPIPOST_API_KEY'),
-        'endpoint' => 'https://app.example.com/sendEmail',
+        'endpoint' => 'https://api.pepipost.com/v2/sendEmail',
     ],
 ```
 
@@ -116,7 +116,7 @@ php artisan make:controller TestController
 ```
 include following function sendMail
 
-viewname.name sent as content of email
+viewname.name will be sent as content of email
 
 ```php
 function sendMail(){
@@ -143,25 +143,47 @@ Route::get('/send/email', 'TestController@sendMail')->name('sendEmail');
 
 ```
 IF want to pass others parameters of Pepipost SendEmail API use embedData function and include below code as below
-Add parameters as per your requirement. Do not use multiple to's with this method.
+Add parameters as per your requirement. Do not use multiple to's,cc's,bcc's with this method.
 
 ```php
 function sendMail(){
 
 Mail::send('viewname.name',$data, function ($message) {
     $message
-        ->to($data['recipient'], $data['recipent_name'])
-        ->from($data['sender_email'], $data['sender_name'])
-        ->subject($data['email_subject'])
-        ->cc($data['recipient_cc'],$data['recipient_cc_name'])
-        ->bcc($data['recipient_bcc'],$data['recipient_bcc_name'])
-        ->replyTo($data['reply_to'], $data['recipient_bcc'])
+        ->to('foo@example.com', 'foo_name')
+        ->from('sender@example.com', 'sender_name')
+        ->subject('subject')
+        ->cc('cc@example.com','recipient_cc_name')
+        ->bcc('recipient_bcc'@example.com,'recipient_bcc_name')
+        ->replyTo('reply_to'@example.com,'recipient_bcc')
         ->attach('/myfilename.pdf')
         ->embedData([
             'personalizations' => ['attributes'=>['ACCOUNT_BAL'=>'String','NAME'=>'NAME'],'x-apiheader'=>'x-apiheader_value','x-apiheader_cc'=>'x-apiheader_cc_value'],'settings' => ['bcc'=>'bccemail@gmail.com','clicktrack'=>1,'footer'=>1,'opentrack'=>1,'unsubscribe'=>1 ],'tags'=>'tags_value','templateId'=>''
         ],'pepipostapi');        
-});
+
 ```
+
+For multiple to's,cc's,bcc's pass recipient,recipient_cc,recipient_bcc as below, create personalizations as required
+
+```php
+
+
+function sendMail(){
+
+Mail::send('viewname.name',$data, function ($message) {
+    $message
+        ->from('sender@example.com', 'sender_name')
+        ->subject('subject')
+        ->replyTo('reply_to'@example.com,'recipient_bcc')
+        ->attach('/myfilename.pdf')
+        ->embedData([
+                    'personalizations' => [['recipient'=>'foo@example.com','attributes'=>['ACCOUNT_BAL'=>'String','NAME'=>'name'],'recipient_cc'=>['cc@example.com','cc2@example.com'],'recipient_bcc'=>['bcc@example.com','bcc2@example.com'],'x-apiheader'=>'x-apiheader_value','x-apiheader_cc'=>'x-apiheader_cc_value'],['recipient'=>'foo@example.com','attributes'=>['ACCOUNT_BAL'=>'String','NAME'=>'name'],'x-apiheader'=>'x-apiheader_value','x-apiheader_cc'=>'x-apiheader_cc_value']],'settings' => ['bcc'=>'bccemail@gmail.com','clicktrack'=>1,'footer'=>1,'opentrack'=>1,'unsubscribe'=>1 ],'tags'=>'tags_value','templateId'=>''
+                ],'pepipostapi');
+        });
+
+```
+
+
 
 
 <a name="announcements"></a>
