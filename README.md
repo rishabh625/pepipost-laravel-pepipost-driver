@@ -1,8 +1,8 @@
-![pepipostlogo](https://pepipost.com/assets/img/pepipost-footLogo.png)
+![pepipostlogo](https://pepipost.com/wp-content/uploads/2017/07/P_LOGO.png)
 
 [![Twitter Follow](https://img.shields.io/twitter/follow/pepi_post.svg?style=social&label=Follow)](https://twitter.com/pepi_post)
 
-# Laravel Driver :coffee: for [Pepipost](http://www.pepipost.com/?utm_campaign=GitHubSDK&utm_medium=GithubSDK&utm_source=GithubSDK)
+# Laravel Driver for [Pepipost](http://www.pepipost.com/?utm_campaign=GitHubSDK&utm_medium=GithubSDK&utm_source=GithubSDK)
 
 A Mail Driver with support for Pepipost Send Email Web API, using the original Laravel API. This library extends the original Laravel classes, so it uses exactly the same methods.
 
